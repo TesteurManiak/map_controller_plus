@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -371,14 +372,20 @@ class StatefulMapController {
         case GeoJsonFeatureType.polygon:
           final poly = feature.geometry as GeoJsonPolygon;
           for (final geoSerie in poly.geoSeries) {
-            addPolygon(name: geoSerie.name, points: geoSerie.toLatLng());
+            var name = geoSerie.name.isEmpty
+                ? Random().nextInt(10000).toString()
+                : geoSerie.name;
+            addPolygon(name: name, points: geoSerie.toLatLng());
           }
           break;
         case GeoJsonFeatureType.multipolygon:
           final mp = feature.geometry as GeoJsonMultiPolygon;
           for (final poly in mp.polygons) {
             for (final geoSerie in poly.geoSeries) {
-              addPolygon(name: geoSerie.name, points: geoSerie.toLatLng());
+              var name = geoSerie.name.isEmpty
+                  ? Random().nextInt(10000).toString()
+                  : geoSerie.name;
+              addPolygon(name: name, points: geoSerie.toLatLng());
             }
           }
           break;
