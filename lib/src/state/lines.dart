@@ -1,13 +1,13 @@
 import 'package:flutter_map/flutter_map.dart';
-import 'package:geojson/geojson.dart';
-import 'package:geopoint/geopoint.dart';
 import 'package:map_controller_plus/src/controller.dart';
 import 'package:map_controller_plus/src/models.dart';
 
 /// State of the lines on the map
-class LinesState {
+base class LinesState {
   /// Default contructor
-  LinesState({required this.notify});
+  LinesState({
+    required this.notify,
+  });
 
   /// The notify function
   final FeedNotifyFunction notify;
@@ -43,35 +43,5 @@ class LinesState {
   void removeLines(List<String> names) {
     _namedLines.removeWhere((key, _) => names.contains(key));
     notify("updateLines", names, removeLines, MapControllerChangeType.lines);
-  }
-
-  /// Export all lines to a [GeoJsonFeature] with geometry
-  /// type [GeoJsonMultiLine]
-  GeoJsonFeature<GeoJsonMultiLine>? toGeoJsonFeatures() {
-    if (namedLines.isEmpty) return null;
-
-    final multiLine = GeoJsonMultiLine(name: "map_lines");
-
-    for (final entry in namedLines.entries) {
-      final polyline = entry.value;
-
-      final line = GeoJsonLine()..name = entry.key;
-      final geoSerie = GeoSerie(name: entry.key, type: GeoSerieType.line);
-
-      for (final point in polyline.points) {
-        geoSerie.geoPoints.add(
-          GeoPoint(latitude: point.latitude, longitude: point.longitude),
-        );
-      }
-      line.geoSerie = geoSerie;
-      multiLine.lines.add(line);
-    }
-
-    final feature = GeoJsonFeature<GeoJsonMultiLine>()
-      ..type = GeoJsonFeatureType.multiline
-      ..geometry = multiLine
-      ..properties = <String, dynamic>{"name": "map_lines"};
-
-    return feature;
   }
 }

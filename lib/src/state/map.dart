@@ -4,7 +4,7 @@ import 'package:map_controller_plus/src/controller.dart';
 import 'package:map_controller_plus/src/models.dart';
 
 /// State of the map
-class MapState {
+base class MapState {
   /// Default constructor
   MapState({
     required this.mapController,
@@ -18,7 +18,7 @@ class MapState {
   final FeedNotifyFunction notify;
 
   double _zoom = 1;
-  LatLng _center = LatLng(0, 0);
+  LatLng _center = const LatLng(0, 0);
 
   /// Zoom in one level
   void zoomIn() {

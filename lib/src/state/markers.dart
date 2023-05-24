@@ -1,12 +1,10 @@
 import 'package:flutter_map/flutter_map.dart';
-import 'package:geojson/geojson.dart';
-import 'package:geopoint/geopoint.dart';
 import 'package:map_controller_plus/src/controller.dart';
 import 'package:map_controller_plus/src/exceptions.dart';
 import 'package:map_controller_plus/src/models.dart';
 
 /// The state of the markers on the map
-class MarkersState {
+base class MarkersState {
   /// Provide a [MapController]
   MarkersState({
     required this.mapController,
@@ -83,43 +81,6 @@ class MarkersState {
     } catch (e) {
       throw MarkerException("Can not remove marker: $e");
     }
-  }
-
-  /// Export all markers to a [GeoJsonFeature] with geometry
-  /// type [GeoJsonMultiPoint]
-  GeoJsonFeature<GeoJsonMultiPoint>? toGeoJsonFeatures() {
-    if (namedMarkers.isEmpty) return null;
-
-    final multiPoint = GeoJsonMultiPoint();
-    final geoPoints = <GeoPoint>[];
-
-    for (final entry in namedMarkers.entries) {
-      final m = entry.value;
-
-      geoPoints.add(
-        GeoPoint(
-          latitude: m.point.latitude,
-          longitude: m.point.longitude,
-        ),
-      );
-    }
-
-    const name = "map_markers";
-
-    multiPoint
-      ..name = name
-      ..geoSerie = GeoSerie.fromNameAndType(
-        name: name,
-        typeStr: "group",
-      );
-    multiPoint.geoSerie?.geoPoints = geoPoints;
-
-    final feature = GeoJsonFeature<GeoJsonMultiPoint>()
-      ..type = GeoJsonFeatureType.multipoint
-      ..properties = <String, dynamic>{"name": name}
-      ..geometry = multiPoint;
-
-    return feature;
   }
 
   int? _markerAt(Marker marker, String name) {

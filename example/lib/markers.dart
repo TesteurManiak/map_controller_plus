@@ -6,7 +6,10 @@ import 'package:latlong2/latlong.dart';
 import 'package:map_controller_plus/map_controller_plus.dart';
 
 class Place {
-  Place(this.name, this.point);
+  const Place(
+    this.name,
+    this.point,
+  );
 
   final String name;
   final LatLng point;
@@ -20,12 +23,12 @@ class _MarkersPageState extends State<MarkersPage> {
   );
   late final StreamSubscription<StatefulMapControllerStateChange> sub;
 
-  final List<Place> places = [
-    Place("Notre-Dame", LatLng(48.853831, 2.348722)),
-    Place("Montmartre", LatLng(48.886463, 2.341169)),
-    Place("Champs-Elysées", LatLng(48.873932, 2.294821)),
-    Place("Chinatown", LatLng(48.827393, 2.361897)),
-    Place("Tour Eiffel", LatLng(48.85801, 2.294713))
+  final places = <Place>[
+    const Place("Notre-Dame", LatLng(48.853831, 2.348722)),
+    const Place("Montmartre", LatLng(48.886463, 2.341169)),
+    const Place("Champs-Elysées", LatLng(48.873932, 2.294821)),
+    const Place("Chinatown", LatLng(48.827393, 2.361897)),
+    const Place("Tour Eiffel", LatLng(48.85801, 2.294713))
   ];
 
   final _markersOnMap = <Place>[];
@@ -62,7 +65,7 @@ class _MarkersPageState extends State<MarkersPage> {
         child: FlutterMap(
           mapController: mapController,
           options: MapOptions(
-            center: LatLng(48.853831, 2.348722),
+            center: const LatLng(48.853831, 2.348722),
             zoom: 11.0,
           ),
           children: [

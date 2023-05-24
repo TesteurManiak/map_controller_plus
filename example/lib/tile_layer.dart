@@ -29,8 +29,10 @@ class _TileLayerPageState extends State<TileLayerPage> {
           children: <Widget>[
             FlutterMap(
               mapController: mapController,
-              options:
-                  MapOptions(center: LatLng(48.853831, 2.348722), zoom: 11.0),
+              options: MapOptions(
+                center: const LatLng(48.853831, 2.348722),
+                zoom: 11.0,
+              ),
               children: [
                 TileLayer(
                   urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',

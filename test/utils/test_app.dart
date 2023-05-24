@@ -23,7 +23,7 @@ class _TestAppState extends State<TestApp> {
         body: FlutterMap(
           mapController: widget.mapController,
           options: MapOptions(
-            center: LatLng(45.5231, -122.6765),
+            center: const LatLng(45.5231, -122.6765),
           ),
           children: [
             TileLayer(
@@ -35,7 +35,7 @@ class _TestAppState extends State<TestApp> {
                 Marker(
                   width: 80,
                   height: 80,
-                  point: LatLng(45.5231, -122.6765),
+                  point: const LatLng(45.5231, -122.6765),
                   builder: (ctx) => const FlutterLogo(),
                 ),
               ],

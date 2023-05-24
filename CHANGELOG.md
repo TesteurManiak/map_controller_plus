@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.0.0-dev.1
+
+**Breaking Changes**
+
+* Removed support for `GeoPoint` and `GeoJson`
+* Upgrade to latest `flutter_map` v5
+* Flutter 3.10 and Dart 3 support
+
 ## 3.0.0
 
 * Updated to [flutter_map](https://pub.dev/packages/flutter_map) v4

@@ -2,9 +2,12 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:map_controller_plus/src/controller.dart';
 import 'package:map_controller_plus/src/models.dart';
 
-class StatefulMarkersState {
+base class StatefulMarkersState {
   /// Provide a [MapController]
-  StatefulMarkersState({required this.mapController, required this.notify});
+  StatefulMarkersState({
+    required this.mapController,
+    required this.notify,
+  });
 
   /// The Flutter Map controller
   final MapController mapController;

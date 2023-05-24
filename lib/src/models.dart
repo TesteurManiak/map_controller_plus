@@ -3,12 +3,12 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
 typedef StatefulMarkerBuidler = Widget Function(
-  BuildContext,
-  Map<String, dynamic>,
+  BuildContext context,
+  Map<String, dynamic> state,
 );
 
 class StatefulMarker {
-  StatefulMarker({
+  const StatefulMarker({
     required this.point,
     required this.state,
     required this.builder,
@@ -22,7 +22,7 @@ class StatefulMarker {
   final double height;
   final AnchorAlign anchorAlign;
   final Map<String, dynamic> state;
-  StatefulMarkerBuidler builder;
+  final StatefulMarkerBuidler builder;
 
   Marker get marker => _build();
 

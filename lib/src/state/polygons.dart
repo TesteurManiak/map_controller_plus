@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:geojson/geojson.dart';
-import 'package:geopoint/geopoint.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:map_controller_plus/src/controller.dart';
 import 'package:map_controller_plus/src/models.dart';
 
 /// State of the polygons on the map
-class PolygonsState {
+base class PolygonsState {
   /// Default contructor
   PolygonsState({required this.notify});
 
@@ -66,31 +64,5 @@ class PolygonsState {
       removePolygons,
       MapControllerChangeType.polygons,
     );
-  }
-
-  /// Export all polygons to a [GeoJsonFeature] with geometry
-  /// type [GeoJsonMultiPolygon]
-  GeoJsonFeature<GeoJsonMultiPolygon>? toGeoJsonFeatures() {
-    if (namedPolygons.isEmpty) return null;
-
-    final multiPolygon = GeoJsonMultiPolygon(name: "map_polygons");
-    for (final entry in namedPolygons.entries) {
-      final mapPolygon = entry.value;
-      final polygon = GeoJsonPolygon()..name = entry.key;
-      final geoSerie = GeoSerie(name: entry.key, type: GeoSerieType.polygon);
-
-      for (final point in mapPolygon.points) {
-        geoSerie.geoPoints.add(
-          GeoPoint(latitude: point.latitude, longitude: point.longitude),
-        );
-      }
-      polygon.geoSeries = [geoSerie];
-      multiPolygon.polygons.add(polygon);
-    }
-    final feature = GeoJsonFeature<GeoJsonMultiPolygon>()
-      ..type = GeoJsonFeatureType.multipolygon
-      ..geometry = multiPolygon
-      ..properties = <String, dynamic>{"name": "map_polygons"};
-    return feature;
   }
 }

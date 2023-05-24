@@ -19,12 +19,12 @@ class _StatefulMarkersPageState extends State<StatefulMarkersPage> {
   );
   late final StreamSubscription<StatefulMapControllerStateChange> sub;
 
-  final List<Place> places = [
-    Place("Notre-Dame", LatLng(48.853831, 2.348722)),
-    Place("Montmartre", LatLng(48.886463, 2.341169)),
-    Place("Champs-Elysées", LatLng(48.873932, 2.294821)),
-    Place("Chinatown", LatLng(48.827393, 2.361897)),
-    Place("Tour Eiffel", LatLng(48.85801, 2.294713))
+  final places = <Place>[
+    Place("Notre-Dame", const LatLng(48.853831, 2.348722)),
+    Place("Montmartre", const LatLng(48.886463, 2.341169)),
+    Place("Champs-Elysées", const LatLng(48.873932, 2.294821)),
+    Place("Chinatown", const LatLng(48.827393, 2.361897)),
+    Place("Tour Eiffel", const LatLng(48.85801, 2.294713))
   ];
 
   final _markersOnMap = <Place>[];
@@ -82,7 +82,7 @@ class _StatefulMarkersPageState extends State<StatefulMarkersPage> {
         child: FlutterMap(
           mapController: mapController,
           options: MapOptions(
-            center: LatLng(48.853831, 2.348722),
+            center: const LatLng(48.853831, 2.348722),
             zoom: 11.0,
           ),
           children: [

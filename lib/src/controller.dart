@@ -1,10 +1,7 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:geojson/geojson.dart';
-import 'package:geopoint/geopoint.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:map_controller_plus/src/models.dart';
 import 'package:map_controller_plus/src/state/lines.dart';
@@ -12,7 +9,6 @@ import 'package:map_controller_plus/src/state/map.dart';
 import 'package:map_controller_plus/src/state/markers.dart';
 import 'package:map_controller_plus/src/state/polygons.dart';
 import 'package:map_controller_plus/src/state/stateful_markers.dart';
-import 'package:uuid/uuid.dart';
 
 /// Function to notify the changefeed
 typedef FeedNotifyFunction = void Function(
@@ -23,7 +19,7 @@ typedef FeedNotifyFunction = void Function(
 );
 
 /// The map controller
-class StatefulMapController {
+base class StatefulMapController {
   /// Provide a Flutter map [MapController]
   StatefulMapController({
     required this.mapController,
@@ -220,28 +216,6 @@ class StatefulMapController {
     );
   }
 
-  /// Add a line on the map
-  void addLineFromGeoPoints({
-    required String name,
-    required List<GeoPoint> geoPoints,
-    double width = 3.0,
-    Color color = Colors.green,
-    bool isDotted = false,
-  }) {
-    final points =
-        GeoSerie(type: GeoSerieType.line, name: "serie", geoPoints: geoPoints)
-            .toLatLng();
-    _linesState.addLine(
-      name: name,
-      line: Polyline(
-        points: points,
-        color: color,
-        strokeWidth: width,
-        isDotted: isDotted,
-      ),
-    );
-  }
-
   /// Add a line on the map.
   void addPolyline({required String name, required Polyline polyline}) {
     _linesState.addLine(name: name, line: polyline);
@@ -267,131 +241,15 @@ class StatefulMapController {
     Color color = Colors.lightBlue,
     double borderWidth = 0.0,
     Color borderColor = const Color(0xFFFFFF00),
-  }) =>
-      _polygonsState.addPolygon(
-        name: name,
-        points: points,
-        color: color,
-        borderWidth: borderWidth,
-        borderColor: borderColor,
-      );
-
-  /// Display some geojson data on the map
-  Future<void> fromGeoJson(
-    String data, {
-    bool verbose = false,
-    Icon markerIcon = const Icon(Icons.location_on),
-    bool noIsolate = kIsWeb,
-  }) async {
-    if (verbose) {
-      debugPrint("From geojson $data");
-    }
-
-    final geojson = GeoJson();
-    geojson.processedFeatures.listen((GeoJsonFeature<dynamic> feature) {
-      switch (feature.type) {
-        case GeoJsonFeatureType.point:
-          final point = feature.geometry as GeoJsonPoint;
-          final pointName = point.name;
-          if (pointName != null) {
-            addMarker(
-              name: pointName,
-              marker: Marker(
-                point:
-                    LatLng(point.geoPoint.latitude, point.geoPoint.longitude),
-                builder: (BuildContext context) => markerIcon,
-              ),
-            );
-          }
-          break;
-        case GeoJsonFeatureType.multipoint:
-          final mp = feature.geometry as GeoJsonMultiPoint;
-          final geoSerie = mp.geoSerie;
-          if (geoSerie != null) {
-            for (final geoPoint in geoSerie.geoPoints) {
-              final pointName = geoPoint.name;
-              if (pointName != null) {
-                addMarker(
-                  name: pointName,
-                  marker: Marker(
-                    point: LatLng(geoPoint.latitude, geoPoint.longitude),
-                    builder: (BuildContext context) => markerIcon,
-                  ),
-                );
-              }
-            }
-          }
-          break;
-        case GeoJsonFeatureType.line:
-          final line = feature.geometry as GeoJsonLine;
-          final lineName = line.name;
-          final geoSerie = line.geoSerie;
-          if (lineName != null && geoSerie != null) {
-            addLine(name: lineName, points: geoSerie.toLatLng());
-          }
-          break;
-        case GeoJsonFeatureType.multiline:
-          final ml = feature.geometry as GeoJsonMultiLine;
-          for (final line in ml.lines) {
-            final lineName = line.name;
-            final geoSerie = line.geoSerie;
-            if (lineName != null && geoSerie != null) {
-              addLine(name: lineName, points: geoSerie.toLatLng());
-            }
-          }
-          break;
-        case GeoJsonFeatureType.polygon:
-          final poly = feature.geometry as GeoJsonPolygon;
-          for (final geoSerie in poly.geoSeries) {
-            final name =
-                geoSerie.name.isEmpty ? const Uuid().v4() : geoSerie.name;
-            addPolygon(name: name, points: geoSerie.toLatLng());
-          }
-          break;
-        case GeoJsonFeatureType.multipolygon:
-          final mp = feature.geometry as GeoJsonMultiPolygon;
-          for (final poly in mp.polygons) {
-            for (final geoSerie in poly.geoSeries) {
-              final name =
-                  geoSerie.name.isEmpty ? const Uuid().v4() : geoSerie.name;
-              addPolygon(name: name, points: geoSerie.toLatLng());
-            }
-          }
-          break;
-        case GeoJsonFeatureType.geometryCollection:
-          // TODO : implement
-          throw UnimplementedError(
-            "GeoJsonFeatureType.geometryCollection not implemented",
-          );
-      }
-    });
-    if (noIsolate) {
-      await geojson.parseInMainThread(data);
-    } else {
-      await geojson.parse(data);
-    }
+  }) {
+    return _polygonsState.addPolygon(
+      name: name,
+      points: points,
+      color: color,
+      borderWidth: borderWidth,
+      borderColor: borderColor,
+    );
   }
-
-  /// Export all the map assets to a [GeoJsonFeatureCollection]
-  GeoJsonFeatureCollection toGeoJsonFeatures() {
-    final featureCollection = GeoJsonFeatureCollection(collection: []);
-    final markersFeature = _markersState.toGeoJsonFeatures();
-    final linesFeature = _linesState.toGeoJsonFeatures();
-    final polygonsFeature = _polygonsState.toGeoJsonFeatures();
-    if (markersFeature != null) {
-      featureCollection.collection.add(markersFeature);
-    }
-    if (linesFeature != null) {
-      featureCollection.collection.add(linesFeature);
-    }
-    if (polygonsFeature != null) {
-      featureCollection.collection.add(polygonsFeature);
-    }
-    return featureCollection;
-  }
-
-  /// Convert the map assets to a geojson string
-  String toGeoJson() => toGeoJsonFeatures().serialize();
 
   /// Notify to the changefeed
   void notify(
