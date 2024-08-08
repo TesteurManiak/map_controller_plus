@@ -28,12 +28,12 @@ class MarkersState {
   /// The markers present on the map and their names
   Map<String, Marker> get namedMarkers => _namedMarkers;
 
-  /// Add a marker on the map
+  /// Adds a marker to the map. Does nothing if a marker with the same name
+  /// already exists.
   void addMarker({required String name, required Marker marker}) {
     try {
-      final marker = _namedMarkers[name];
-
-      if (marker == null) return;
+      // If the marker with the same name already exists, do nothing
+      if (_namedMarkers.containsKey(name)) return;
 
       final markerAt = _markerAt(marker, name);
 
