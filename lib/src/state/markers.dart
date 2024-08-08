@@ -32,7 +32,7 @@ class MarkersState {
   /// name already exists.
   void addMarker({required String name, required Marker marker}) {
     try {
-      // If the marker with the same name already exists, do nothing
+      // If the marker with the same name already exists, replace it
       if (_namedMarkers.containsKey(name)) {
         final markerAt = _markerAt(name);
         _markers[markerAt!] = marker;
