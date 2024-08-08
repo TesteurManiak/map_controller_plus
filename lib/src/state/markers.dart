@@ -28,19 +28,16 @@ class MarkersState {
   /// The markers present on the map and their names
   Map<String, Marker> get namedMarkers => _namedMarkers;
 
-  /// Adds a marker to the map. Does nothing if a marker with the same name
-  /// already exists.
+  /// Adds a marker to the map. Replaces the marker if a marker with the same
+  /// name already exists.
   void addMarker({required String name, required Marker marker}) {
     try {
       // If the marker with the same name already exists, do nothing
-      if (_namedMarkers.containsKey(name)) return;
-
-      final markerAt = _markerAt(marker, name);
-
-      if (markerAt == null) {
-        _markers.add(marker);
+      if (_namedMarkers.containsKey(name)) {
+        final markerAt = _markerAt(name);
+        _markers[markerAt!] = marker;
       } else {
-        _markers[markerAt] = marker;
+        _markers.add(marker);
       }
     } catch (e) {
       throw MarkerException("Can not build marker $name for add: $e");
@@ -60,7 +57,7 @@ class MarkersState {
 
       if (marker == null) return;
 
-      final removeAt = _markerAt(marker, name);
+      final removeAt = _markerAt(name);
       if (removeAt == null) {
         throw MarkerException("Can not find marker $name for removal");
       }
@@ -122,7 +119,7 @@ class MarkersState {
     return feature;
   }
 
-  int? _markerAt(Marker marker, String name) {
+  int? _markerAt(String name) {
     final markerAt = _namedMarkers[name];
 
     if (markerAt == null) {
